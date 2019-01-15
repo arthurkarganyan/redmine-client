@@ -1,0 +1,48 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    coderay (1.1.2)
+    colorize (0.7.7)
+    equatable (0.5.0)
+    httparty (0.16.2)
+      multi_xml (>= 0.5.2)
+    method_source (0.8.2)
+    multi_xml (0.5.5)
+    necromancer (0.4.0)
+    pastel (0.7.2)
+      equatable (~> 0.5.0)
+      tty-color (~> 0.4.0)
+    pg (0.20.0)
+    pry (0.10.4)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    slop (3.6.0)
+    timers (4.2.0)
+    tty-color (0.4.3)
+    tty-cursor (0.6.0)
+    tty-prompt (0.18.0)
+      necromancer (~> 0.4.0)
+      pastel (~> 0.7.0)
+      timers (~> 4.0)
+      tty-cursor (~> 0.6.0)
+      tty-reader (~> 0.5.0)
+    tty-reader (0.5.0)
+      tty-cursor (~> 0.6.0)
+      tty-screen (~> 0.6.4)
+      wisper (~> 2.0.0)
+    tty-screen (0.6.5)
+    wisper (2.0.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  colorize
+  httparty
+  pg
+  pry
+  tty-prompt
+
+BUNDLED WITH
+   1.17.1
