@@ -1,10 +1,35 @@
 class Issue
+  attr_reader :issue_hash
+
+  def initialize(issue_hash)
+    @issue_hash = issue_hash
+  end
+
   def formatted
-    # puts ""
-    # puts "Subject:\t" + issue["subject"].yellow
-    # puts "Assigned to:\t" + issue["assigned_to"]["name"].green
-    # puts "Status:\t\t" + issue["status"]["name"].red
-    # puts ""
-    # puts issue["description"]
+    res = []
+    res << "Subject:\t" + subject.yellow
+    res << "Assigned to:\t" + assigned_to.green
+    res << "Status:\t\t" + status.red
+    res << ""
+    res << description
+    res.join("\n")
+  end
+
+  def description
+    issue_hash["description"]
+  end
+
+  def status
+    issue_hash["status"]["name"]
+  end
+
+  def assigned_to
+    return issue_hash["assigned_to"]["name"] if issue_hash["assigned_to"]
+    "None"
+    # issue_hash["assigned_to"]["name"]
+  end
+
+  def subject
+    issue_hash["subject"]
   end
 end

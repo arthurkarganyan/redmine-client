@@ -6,6 +6,7 @@ require 'colorize'
 
 require_relative 'issue_filters/my_issues_filter'
 require_relative 'issue_filters/take_new_issue_filter'
+require_relative 'issue'
 
 # https://easyredmine.docs.apiary.io/#reference/issues/issue/retrieve-issue
 
@@ -27,7 +28,7 @@ class Redmine
   end
 
   def issue(id)
-    self.class.get("/issues/#{id}.xml", {})["issue"]
+    Issue.new(self.class.get("/issues/#{id}.xml", {})["issue"])
   end
 
   def issues
@@ -49,27 +50,22 @@ class Redmine
   end
 end
 
-r = Redmine.new
+client = Redmine.new
 if ARGV[0] == "my"
-  i = MyIssuesFilter.new(r.issues_sorted).call
+  i = MyIssuesFilter.new(client.issues_sorted).call
   puts "Number of issues: #{i.count}"
   i.each do |issue|
     puts "#{issue["priority"]["name"]} #{issue["status"]["name"]} #{issue["subject"]} #{REDMINE_URL}/issues/#{issue["id"]}"
   end
 elsif ARGV[0] == "new"
-  i = TakeNewIssueFilter.new(r.issues_sorted).call
+  i = TakeNewIssueFilter.new(client.issues_sorted).call
   puts "Number of issues: #{i.count}"
   i.each do |issue|
     puts "#{issue["priority"]["name"]} #{issue["status"]["name"]} #{issue["subject"]} #{REDMINE_URL}/issues/#{issue["id"]}"
   end
 elsif ARGV[0].to_i.to_s == ARGV[0]
-  issue = r.issue(ARGV[0])
-  puts ""
-  puts "Subject:\t" + issue["subject"].yellow
-  puts "Assigned to:\t" + issue["assigned_to"]["name"].green
-  puts "Status:\t\t" + issue["status"]["name"].red
-  puts ""
-  puts issue["description"]
+  issue = client.issue(ARGV[0])
+  puts "\n#{issue.formatted}"
 else
   fail "Argument is expected"
 end
