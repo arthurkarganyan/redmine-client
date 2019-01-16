@@ -6,6 +6,7 @@ require 'colorize'
 
 require_relative 'issue_filters/my_issues_filter'
 require_relative 'issue_filters/take_new_issue_filter'
+require_relative 'issue_filters/keyword_issues_filter'
 require_relative 'issue'
 
 # https://easyredmine.docs.apiary.io/#reference/issues/issue/retrieve-issue
@@ -43,25 +44,40 @@ class Redmine
     end
   end
 
+  def issues_objs
+    issues.map do |issue_hash|
+      Issue.new(issue_hash)
+    end
+  end
+
   def issues_sorted
-    issues.sort_by do |issue|
-      issue["priority"]["name"].split("").last.to_i
+    issues_objs.sort_by do |issue|
+      issue.priority.split("").last.to_i
     end
   end
 end
 
 client = Redmine.new
+index = ARGV.find_index("--no")
+
+issues = client.issues_sorted
+
+if index
+  exclude_keywords = ARGV[index + 1].split(",")
+  issues = KeywordIssuesFilter.new(issues, exclude_keywords).call
+end
+
 if ARGV[0] == "my"
-  i = MyIssuesFilter.new(client.issues_sorted).call
+  i = MyIssuesFilter.new(issues).call
   puts "Number of issues: #{i.count}"
   i.each do |issue|
-    puts "#{issue["priority"]["name"]} #{issue["status"]["name"]} #{issue["subject"]} #{REDMINE_URL}/issues/#{issue["id"]}"
+    puts issue.formatted_short
   end
 elsif ARGV[0] == "new"
-  i = TakeNewIssueFilter.new(client.issues_sorted).call
+  i = TakeNewIssueFilter.new(issues).call
   puts "Number of issues: #{i.count}"
   i.each do |issue|
-    puts "#{issue["priority"]["name"]} #{issue["status"]["name"]} #{issue["subject"]} #{REDMINE_URL}/issues/#{issue["id"]}"
+    puts issue.formatted_short
   end
 elsif ARGV[0].to_i.to_s == ARGV[0]
   issue = client.issue(ARGV[0])

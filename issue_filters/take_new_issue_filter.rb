@@ -6,10 +6,10 @@ class TakeNewIssueFilter < IssuesFilter
     #   ["On Hold: Technical", "On Hold: Business", "In QA", "Passed QA"].include?(issue["status"]["name"])
     # end
     res = issues.select do |issue|
-      ["New"].include?(issue["status"]["name"])
+      ["New"].include?(issue.status)
     end
     res.select do |issue|
-      !issue["assigned_to"] || issue["assigned_to"]["name"] == "Engineering"
+      %w(Engineering None).include?(issue.assigned_to)
     end
   end
 end

@@ -15,6 +15,10 @@ class Issue
     res.join("\n")
   end
 
+  def formatted_short
+    "#{priority} #{status} #{subject} #{REDMINE_URL}/issues/#{id}"
+  end
+
   def description
     issue_hash["description"]
   end
@@ -31,5 +35,13 @@ class Issue
 
   def subject
     issue_hash["subject"]
+  end
+
+  def priority
+    issue_hash["priority"]["name"]
+  end
+
+  def id
+    issue_hash["id"]
   end
 end
