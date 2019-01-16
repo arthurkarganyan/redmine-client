@@ -4,6 +4,9 @@ require 'tty-prompt'
 require 'shellwords'
 require 'colorize'
 
+require_relative 'issue_filters/my_issues_filter'
+require_relative 'issue_filters/take_new_issue_filter'
+
 # https://easyredmine.docs.apiary.io/#reference/issues/issue/retrieve-issue
 
 LIMIT = 100
@@ -39,25 +42,35 @@ class Redmine
     end
   end
 
-  def issues_filtered
-    res = issues.reject do |issue|
-      ["On Hold: Technical", "On Hold: Business", "In QA", "Passed QA"].include?(issue["status"]["name"])
-    end
-    res = res.select do |issue|
-      !issue["assigned_to"] || issue["assigned_to"]["name"] == "Engineering" || issue["assigned_to"]["name"] == REDMINE_FULLNAME
-    end
-    res.sort_by do |issue|
+  def issues_sorted
+    issues.sort_by do |issue|
       issue["priority"]["name"].split("").last.to_i
     end
   end
 end
 
 r = Redmine.new
-
-# a = r.projects
-i = r.issues_filtered
-i.each do |issue|
-  puts "#{issue["priority"]["name"]} #{issue["status"]["name"]} #{issue["subject"]} #{REDMINE_URL}/issues/#{issue["id"]}"
+if ARGV[0] == "my"
+  i = MyIssuesFilter.new(r.issues_sorted).call
+  puts "Number of issues: #{i.count}"
+  i.each do |issue|
+    puts "#{issue["priority"]["name"]} #{issue["status"]["name"]} #{issue["subject"]} #{REDMINE_URL}/issues/#{issue["id"]}"
+  end
+elsif ARGV[0] == "new"
+  i = TakeNewIssueFilter.new(r.issues_sorted).call
+  puts "Number of issues: #{i.count}"
+  i.each do |issue|
+    puts "#{issue["priority"]["name"]} #{issue["status"]["name"]} #{issue["subject"]} #{REDMINE_URL}/issues/#{issue["id"]}"
+  end
+elsif ARGV[0].to_i.to_s == ARGV[0]
+  issue = r.issue(ARGV[0])
+  puts ""
+  puts "Subject:\t" + issue["subject"].yellow
+  puts "Assigned to:\t" + issue["assigned_to"]["name"].green
+  puts "Status:\t\t" + issue["status"]["name"].red
+  puts ""
+  puts issue["description"]
+else
+  fail "Argument is expected"
 end
-# issue = r.issue(1464)
 
