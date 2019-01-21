@@ -72,7 +72,12 @@ if index
   issues = KeywordIssuesFilter.new(issues, exclude_keywords).call
 end
 
-if ARGV[0] == "my"
+if ARGV[0] == "projects"
+  projects = client.projects
+  projects.each do |project|
+    puts "#{project["id"]} #{project["name"]}"
+  end
+elsif ARGV[0] == "my"
   i = MyIssuesFilter.new(issues).call
   puts "Number of issues: #{i.count}"
   i.each do |issue|
