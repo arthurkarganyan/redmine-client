@@ -3,6 +3,7 @@ require 'httparty'
 require 'tty-prompt'
 require 'shellwords'
 require 'colorize'
+require 'yaml'
 
 require_relative 'issue_filters/my_issues_filter'
 require_relative 'issue_filters/take_new_issue_filter'
@@ -13,11 +14,15 @@ require_relative 'issue'
 
 LIMIT = 100
 
-REDMINE_USERNAME = ENV['REDMINE_USERNAME'] || fail("env REDMINE_USERNAME is not set")
-REDMINE_PASSWORD = ENV['REDMINE_PASSWORD'] || fail("env REDMINE_PASSWORD is not set")
-REDMINE_FULLNAME = ENV['REDMINE_FULLNAME'] || fail("env REDMINE_FULLNAME is not set")
-REDMINE_URL = ENV['REDMINE_URL'] || fail("env REDMINE_URL is not set")
-DEFAULT_PROJECT_ID = ENV['DEFAULT_PROJECT_ID'] || fail("env DEFAULT_PROJECT_ID is not set")
+CONFIG_FILE_PATH = '.config.yml'
+
+CONFIG = YAML.load_file(CONFIG_FILE_PATH)
+
+REDMINE_USERNAME = CONFIG['username'] || fail("username is not set is #{CONFIG_FILE_PATH}")
+REDMINE_PASSWORD = CONFIG['password'] || fail("password is not set is #{CONFIG_FILE_PATH}")
+REDMINE_FULLNAME = CONFIG['fullname'] || fail("fullname is not set is #{CONFIG_FILE_PATH}")
+REDMINE_URL = CONFIG['redmine_url'] || fail("redmine_url is not set is #{CONFIG_FILE_PATH}")
+DEFAULT_PROJECT_ID = CONFIG['project_id'] || fail("project_id is not set is #{CONFIG_FILE_PATH}")
 
 class Redmine
   include HTTParty

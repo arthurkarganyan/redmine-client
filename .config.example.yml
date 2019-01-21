@@ -1,0 +1,6 @@
+config:
+  username: "john"
+  password: "$$$$$$$$"
+  fullname: "John Cena"
+  redmine_url: "https://some.redmine.url"
+  project_id: 1
