@@ -9,3 +9,5 @@ gem "pry"
 gem "httparty"
 gem "colorize"
 gem 'jira-ruby'
+
+gem "activesupport", "~> 5.2"

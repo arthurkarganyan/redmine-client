@@ -1,4 +1,4 @@
-class Issue
+class RedmineIssue
   attr_reader :issue_hash
 
   def initialize(issue_hash)
@@ -15,8 +15,8 @@ class Issue
     res.join("\n")
   end
 
-  def formatted_short
-    "#{priority} #{status} #{subject} #{REDMINE_URL}/issues/#{id}"
+  def url
+    "#{REDMINE_URL}/issues/#{id}"
   end
 
   def description
