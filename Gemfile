@@ -8,3 +8,4 @@ gem "tty-prompt"
 gem "pry"
 gem "httparty"
 gem "colorize"
+gem 'jira-ruby'
