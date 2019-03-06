@@ -10,6 +10,9 @@ GEM
     colorize (0.7.7)
     concurrent-ruby (1.1.4)
     equatable (0.5.0)
+    gitlab (4.10.0)
+      httparty (~> 0.14, >= 0.14.0)
+      terminal-table (~> 1.5, >= 1.5.1)
     httparty (0.16.2)
       multi_xml (>= 0.5.2)
     i18n (1.6.0)
@@ -32,6 +35,8 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     slop (3.6.0)
+    terminal-table (1.8.0)
+      unicode-display_width (~> 1.1, >= 1.1.1)
     thread_safe (0.3.6)
     timers (4.2.0)
     tty-color (0.4.3)
@@ -49,6 +54,7 @@ GEM
     tty-screen (0.6.5)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
+    unicode-display_width (1.5.0)
     wisper (2.0.0)
 
 PLATFORMS
@@ -57,6 +63,7 @@ PLATFORMS
 DEPENDENCIES
   activesupport (~> 5.2)
   colorize
+  gitlab (~> 4.10)
   httparty
   jira-ruby
   pry

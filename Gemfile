@@ -11,3 +11,5 @@ gem "colorize"
 gem 'jira-ruby'
 
 gem "activesupport", "~> 5.2"
+
+gem "gitlab", "~> 4.10"
